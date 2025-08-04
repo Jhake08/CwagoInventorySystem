@@ -123,6 +123,13 @@ function updateChangeIndicator(statId, change) {
 function updateInventoryTable(data) {
     const tableBody = document.getElementById('inventory-table-body');
     tableBody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="8" style="text-align:center;">No inventory data available.</td>`;
+        tableBody.appendChild(row);
+        return;
+    }
     
     // Sort by most recent first
     const sortedData = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
