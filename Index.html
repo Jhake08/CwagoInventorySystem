@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoryPro | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fas fa-boxes logo-icon"></i>
+                <h1 class="logo-text">InventoryPro</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li class="nav-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-box-open"></i>
+                        <span>Inventory</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <span class="username">Admin User</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Dashboard Overview</h2>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search inventory...">
+                    </div>
+                    <button class="btn btn-primary add-item-btn">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
+                </div>
+            </header>
+
+            <!-- Stats Cards -->
+            <section class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-icon revenue">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <p class="stat-value" id="total-revenue">$0</p>
+                        <p class="stat-change positive">+0% from last month</p>
+                    </div>
+                </div>
+
+                <div class="stat-card fade-in delay-1">
+                    <div class="stat-icon profit">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Profit</h3>
+                        <p class="stat-value" id="total-profit">$0</p>
+                        <p class="stat-change positive">+0% from last month</p>
+                    </div>
+                </div>
+
+                <div class="stat-card fade-in delay-2">
+                    <div class="stat-icon inventory">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Items</h3>
+                        <p class="stat-value" id="total-items">0</p>
+                        <p class="stat-change negative">-0% from last month</p>
+                    </div>
+                </div>
+
+                <div class="stat-card fade-in delay-3">
+                    <div class="stat-icon sold">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Items Sold</h3>
+                        <p class="stat-value" id="items-sold">0</p>
+                        <p class="stat-change positive">+0% from last month</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container slide-up">
+                    <div class="chart-header">
+                        <h3>Monthly Revenue</h3>
+                        <select class="chart-period">
+                            <option>Last 7 Days</option>
+                            <option selected>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                        </select>
+                    </div>
+                    <canvas id="revenue-chart"></canvas>
+                </div>
+
+                <div class="chart-container slide-up delay-1">
+                    <div class="chart-header">
+                        <h3>Category Distribution</h3>
+                        <select class="chart-period">
+                            <option selected>All Categories</option>
+                        </select>
+                    </div>
+                    <canvas id="category-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Recent Items Table -->
+            <section class="inventory-table slide-up delay-2">
+                <div class="table-header">
+                    <h3>Recent Inventory</h3>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                <th>Sold</th>
+                                <th>Revenue</th>
+                                <th>Profit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <!-- Data will be loaded here from Google Sheets -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal-overlay" id="add-item-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Add New Inventory Item</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="add-item-form">
+                <div class="form-group">
+                    <label for="item-name">Item Name</label>
+                    <input type="text" id="item-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-category">Category</label>
+                    <select id="item-category" required>
+                        <option value="">Select Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Food">Food</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cost-price">Cost Price ($)</label>
+                        <input type="number" id="cost-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="selling-price">Selling Price ($)</label>
+                        <input type="number" id="selling-price" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="initial-stock">Initial Stock</label>
+                    <input type="number" id="initial-stock" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/gsheet.js"></script>
+    <script src="scripts/charts.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
