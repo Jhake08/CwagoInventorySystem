@@ -8,6 +8,13 @@ async function fetchInventoryData() {
     try {
         const response = await fetch(`${scriptURL}?action=getItems&sheetId=${sheetID}&sheetName=${sheetName}`);
         const data = await response.json();
+
+        console.log('Raw inventory data response:', data);
+
+        if (!Array.isArray(data)) {
+            console.error('Inventory data is not an array:', data);
+            return [];
+        }
         
         // Process data (convert string numbers to actual numbers)
         return data.map(item => ({
