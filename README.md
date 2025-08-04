@@ -1,0 +1,2 @@
+# CwagoInventorySystem
+GoogleAppscriptConnected
